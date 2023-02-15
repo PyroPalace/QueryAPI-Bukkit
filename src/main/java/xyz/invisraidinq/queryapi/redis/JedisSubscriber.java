@@ -20,14 +20,10 @@ public class JedisSubscriber extends JedisPubSub {
             final String[] data = message.split(CC.MESSAGE_SPLITTER);
             final String command = data[0];
 
-            CC.log("Received command " + command);
-
             if (command.equals("ServerUpdate")) {
                 final JsonObject object = JsonParser.parseString(data[1]).getAsJsonObject();
 
                 this.jedisManager.getServerManager().initOrUpdateServer(new Server(object));
-
-                CC.log("Updated server " + object.get("serverName").getAsString());
             } else {
                 CC.log("Couldn't recognize packet: " + command);
             }
