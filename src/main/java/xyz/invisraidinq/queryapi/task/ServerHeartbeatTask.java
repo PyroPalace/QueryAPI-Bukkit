@@ -6,27 +6,36 @@ import xyz.invisraidinq.queryapi.server.ServerManager;
 import xyz.invisraidinq.queryapi.utils.CC;
 import xyz.invisraidinq.queryapi.utils.ConfigFile;
 
+import java.util.Iterator;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
 public class ServerHeartbeatTask extends BukkitRunnable {
 
     private final ServerManager serverManager;
-    private final long updateInterval;
+    private final long updateIntervalMillis;
 
     /**
      * Constructor to initialise the {@link ServerHeartbeatTask}
      *
      * @param serverManager The {@link ServerManager} instance
+     * @param settingsFile  The {@link ConfigFile} containing the settings
      */
+
     public ServerHeartbeatTask(ServerManager serverManager, ConfigFile settingsFile) {
         this.serverManager = serverManager;
-        this.updateInterval = settingsFile.getLong("SERVER.UPDATE-INTERVAL");
+        this.updateIntervalMillis = TimeUnit.SECONDS.toMillis(settingsFile.getLong("SERVER.UPDATE-INTERVAL"));
     }
 
     @Override
     public void run() {
-        for (Server server : this.serverManager.getServerMap().values()) {
-            if (server.getLastUpdate() + (this.updateInterval * 2) < System.currentTimeMillis()) {
+        long currentTime = System.currentTimeMillis();
+        for (Iterator<Map.Entry<String, Server>> it = serverManager.getServerMap().entrySet().iterator(); it.hasNext();) {
+            Map.Entry<String, Server> entry = it.next();
+            Server server = entry.getValue();
+            if (server.getLastUpdate() + (updateIntervalMillis * 2) < currentTime) {
                 CC.log("Server " + server.getServerName() + " hasn't had a heartbeat for 30s, setting server state as offline");
-                this.serverManager.getServerMap().remove(server.getServerName().toLowerCase());
+                it.remove();
             }
         }
     }
