@@ -26,5 +26,4 @@ public enum ServerStatus {
     public String getFormat() {
         return this.format;
     }
-
 }

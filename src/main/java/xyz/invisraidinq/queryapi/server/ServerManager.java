@@ -4,10 +4,11 @@ import xyz.invisraidinq.queryapi.QueryPlugin;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ServerManager {
 
-    private final Map<String, Server> serverMap = new HashMap<>();
+    private final Map<String, Server> serverMap = new ConcurrentHashMap<>();
 
     /**
      * Constructor to initialise an {@link ServerManager} instance

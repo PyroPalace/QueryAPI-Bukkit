@@ -144,5 +144,4 @@ public class Server {
     public void setServerStatus(ServerStatus status) {
         this.serverStatus = status;
     }
-
 }
