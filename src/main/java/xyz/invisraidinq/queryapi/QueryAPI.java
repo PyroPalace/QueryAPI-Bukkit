@@ -46,6 +46,10 @@ public class QueryAPI {
         return this.serverManager.getServerByName(name.toLowerCase());
     }
 
+    public ServerManager getServerManager() {
+        return serverManager;
+    }
+
     /**
      * Get the total online player count
      *

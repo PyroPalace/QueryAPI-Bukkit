@@ -99,7 +99,6 @@ public class Server {
         return this.motd;
     }
 
-
     /**
      * Get the server status
      *
